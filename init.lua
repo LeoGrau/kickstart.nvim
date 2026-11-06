@@ -99,7 +99,7 @@ do
   vim.g.maplocalleader = ' '
 
   -- Set to true if you have a Nerd Font installed and selected in the terminal
-  vim.g.have_nerd_font = false
+  vim.g.have_nerd_font = true
 
   -- [[ Setting options ]]
   --  See `:help vim.o`
@@ -430,11 +430,87 @@ do
       comments = { italic = false }, -- Disable italics in comments
     },
   }
+  -- Catpuccin Theme
+  vim.pack.add { { src = 'https://github.com/catppuccin/nvim', name = 'catppuccin' } }
+  -- Catpuccin Configuration
+  require('catppuccin').setup {
+    flavour = 'auto', -- latte, frappe, macchiato, mocha
+    background = { -- :h background
+      light = 'latte',
+      dark = 'mocha',
+    },
+    transparent_background = false, -- disables setting the background color.
+    float = {
+      transparent = false, -- enable transparent floating windows
+      solid = false, -- use solid styling for floating windows, see |winborder|
+    },
+    term_colors = false, -- sets terminal colors (e.g. `g:terminal_color_0`)
+    dim_inactive = {
+      enabled = false, -- dims the background color of inactive window
+      shade = 'dark',
+      percentage = 0.15, -- percentage of the shade to apply to the inactive window
+    },
+    no_italic = false, -- Force no italic
+    no_bold = false, -- Force no bold
+    no_underline = false, -- Force no underline
+    styles = { -- Handles the styles of general hi groups (see `:h highlight-args`):
+      comments = { 'italic' }, -- Change the style of comments
+      conditionals = { 'italic' },
+      loops = {},
+      functions = {},
+      keywords = {},
+      strings = {},
+      variables = {},
+      numbers = {},
+      booleans = {},
+      properties = {},
+      types = {},
+      operators = {},
+      -- miscs = {}, -- Uncomment to turn off hard-coded styles
+    },
+    lsp_styles = { -- Handles the style of specific lsp hl groups (see `:h lsp-highlight`).
+      virtual_text = {
+        errors = { 'italic' },
+        hints = { 'italic' },
+        warnings = { 'italic' },
+        information = { 'italic' },
+        ok = { 'italic' },
+      },
+      underlines = {
+        errors = { 'underline' },
+        hints = { 'underline' },
+        warnings = { 'underline' },
+        information = { 'underline' },
+        ok = { 'underline' },
+      },
+      inlay_hints = {
+        background = true,
+      },
+    },
+    color_overrides = {},
+    custom_highlights = {},
+    auto_integrations = true,
+    integrations = {
+      cmp = true,
+      gitsigns = true,
+      nvimtree = true,
+      notify = false,
+      mini = {
+        enabled = true,
+        indentscope_color = '',
+      },
+      -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
+    },
+  }
+
+  -- setup must be called before loading
+  vim.cmd.colorscheme 'catppuccin-nvim'
 
   -- Load the colorscheme here.
   -- Like many other themes, this one has different styles, and you could load
   -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-  vim.cmd.colorscheme 'tokyonight-night'
+
+  --vim.cmd.colorscheme 'tokyonight-night'
 
   -- Highlight todo, notes, etc in comments
   vim.pack.add { gh 'folke/todo-comments.nvim' }
@@ -464,6 +540,26 @@ do
       inside_next = 'ii',
     },
     n_lines = 500,
+  }
+
+  -- Autocomplete Code
+  vim.pack.add { gh  'windwp/nvim-ts-autotag' }
+ 
+  require('nvim-ts-autotag').setup {
+    opts = {
+      -- Defaults
+      enable_close = true, -- Auto close tags
+      enable_rename = true, -- Auto rename pairs of tags
+      enable_close_on_slash = false, -- Auto close on trailing </
+    },
+    -- Also override individual filetype configs, these take priority.
+    -- Empty by default, useful if one of the "opts" global settings
+    -- doesn't work well in a specific filetype
+    per_filetype = {
+      ['html'] = {
+        enable_close = false,
+      },
+    },
   }
 
   -- Add/delete/replace surroundings (brackets, quotes, etc.)
@@ -743,7 +839,7 @@ do
     --
     -- But for many setups, the LSP (`rust_analyzer`) will work just fine
     -- rust_analyzer = {},
-
+    ts_ls = {},
     stylua = {}, -- Used to format Lua code
 
     -- Special Lua Config, as recommended by neovim help docs
@@ -998,6 +1094,16 @@ do
       end
     end,
   })
+
+  -- Just 2 tabs for typescript and javascript. Including .tsx and .jsx
+  vim.api.nvim_create_autocmd('FileType', {
+    pattern = { 'typescript', 'typescriptreact', 'javascript' },
+    callback = function()
+      vim.o.tabstop = 2
+      vim.o.shiftwidth = 2
+      vim.o.softtabstop = 2
+    end,
+  })
 end
 
 -- ============================================================
@@ -1018,7 +1124,7 @@ do
   -- require 'kickstart.plugins.indent_line'
   -- require 'kickstart.plugins.lint'
   -- require 'kickstart.plugins.autopairs'
-  -- require 'kickstart.plugins.neo-tree'
+  require 'kickstart.plugins.neo-tree'
 
   -- NOTE: You can add your own plugins, configuration, etc. in `lua/custom/plugins/*.lua`.
   --

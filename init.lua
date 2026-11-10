@@ -642,6 +642,39 @@ do
     },
   }
 
+  -- Akinsho/ToggleTerm
+  vim.pack.add { gh "akinsho/toggleterm.nvim" }
+  require("toggleterm").setup({
+    direction = 'horizontal',
+    size = 12,
+  })
+  vim.keymap.set({ "n", "t" }, "<C-t>", "<cmd>ToggleTerm<cr>", { desc = "Toggle Terminal" })
+  
+  -- Akinsho/Bufferline
+  vim.pack.add { gh 'akinsho/bufferline.nvim' }
+  require("bufferline").setup {}
+
+  -- Toggle Tab (Next and Prev)
+  vim.keymap.set("n", "<Tab>", "<cmd>BufferLineCycleNext<cr>", { desc = "Next File Tab" })
+  vim.keymap.set("n", "<S-Tab>", "<cmd>BufferLineCyclePrev<cr>", { desc = "Next File Tab" })
+  
+  -- Go to especific tab <number>
+  for i = 1, 9 do
+    vim.keymap.set("n", "<leader>" .. i, "<cmd>BufferLineGoToBuffer " .. i .. "<cr>", { desc = "Go to 'n' buffer" })
+  end
+
+  -- Mini Bufremove
+  vim.pack.add { gh 'echasnovski/mini.bufremove' }
+  require("mini.bufremove").setup {}
+
+  vim.keymap.set("n", "<leader>bd", function ()
+    require("mini.bufremove").delete(0, false)
+  end, { desc = "Close buffer / tab (keep layout)" })
+
+  -- Split vertical or horizontal.
+  vim.keymap.set("n", "<leader>sv", "<cmd>vsplit<cr>", { desc = "Split vertical" })
+  vim.keymap.set("n", "<leader>sh", "<cmd>split<cr>", { desc = "Split horizontal" })
+
   -- Enable Telescope extensions if they are installed
   pcall(require('telescope').load_extension, 'fzf')
   pcall(require('telescope').load_extension, 'ui-select')

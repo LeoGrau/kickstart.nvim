@@ -673,7 +673,7 @@ do
 
   -- Split vertical or horizontal.
   vim.keymap.set("n", "<leader>sv", "<cmd>vsplit<cr>", { desc = "Split vertical" })
-  vim.keymap.set("n", "<leader>sh", "<cmd>split<cr>", { desc = "Split horizontal" })
+  vim.keymap.set("n", "<leader>s", "<cmd>split<cr>", { desc = "Split horizontal" })
 
   -- Enable Telescope extensions if they are installed
   pcall(require('telescope').load_extension, 'fzf')
@@ -864,7 +864,7 @@ do
   local servers = {
     -- clangd = {},
     -- gopls = {},
-    -- pyright = {},
+    pyright = {},
     -- tsc = {},
     --
     -- Some languages (like rust) have entire language plugins that can be useful:
@@ -1025,7 +1025,7 @@ do
       -- <c-k>: Toggle signature help
       --
       -- See `:help blink-cmp-config-keymap` for defining your own keymap
-      preset = 'default',
+      preset = 'enter',
 
       -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
       --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
